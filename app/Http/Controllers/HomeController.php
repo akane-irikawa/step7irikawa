@@ -23,6 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        // ログイン後に商品一覧画面へリダイレクト
+        return redirect()->route('productList.index'); // 商品一覧画面へのリダイレクト
     }
 }
