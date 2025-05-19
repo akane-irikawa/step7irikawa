@@ -10,6 +10,24 @@
                 <div class="card-header">商品情報詳細画面</div>
 
                 <div class="card-body">
+                {{-- 成功メッセージ --}}
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    {{-- エラーメッセージ --}}
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    
                     <table class="table">
                         <tr>
                             <th>商品情報ID</th>

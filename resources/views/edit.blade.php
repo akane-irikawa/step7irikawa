@@ -9,6 +9,24 @@
                 <div class="card-header">商品情報編集画面</div>
 
                 <div class="card-body">
+                    {{-- 成功メッセージ --}}
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    {{-- バリデーションエラー表示 --}}
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('productList.update', $product->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -25,7 +43,7 @@
                         <div class="row mb-3">
                             <label for="product_name" class="col-md-4 col-form-label text-md-end">商品名</label>
                             <div class="col-md-6">
-                                <input id="product_name" type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name" value="{{ old('product_name', $product->product_name) }}" required>
+                                <input id="product_name" type="text" class="form-control @error('product_name') is-invalid @enderror" name="product_name" value="{{ old('product_name', $product->product_name) }}" >
                                 @error('product_name')
                                     <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                                 @enderror
@@ -36,7 +54,7 @@
                         <div class="row mb-3">
                             <label for="company_id" class="col-md-4 col-form-label text-md-end">メーカー</label>
                             <div class="col-md-6">
-                                <select id="company_id" class="form-control @error('company_id') is-invalid @enderror" name="company_id" required>
+                                <select id="company_id" class="form-control @error('company_id') is-invalid @enderror" name="company_id" >
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}" {{ $company->id == $product->company_id ? 'selected' : '' }}>
                                             {{ $company->company_name }}
@@ -53,7 +71,7 @@
                         <div class="row mb-3">
                             <label for="price" class="col-md-4 col-form-label text-md-end">価格</label>
                             <div class="col-md-6">
-                                <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ old('price', $product->price) }}" required>
+                                <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ old('price', $product->price) }}" >
                                 @error('price')
                                     <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                                 @enderror
@@ -64,7 +82,7 @@
                         <div class="row mb-3">
                             <label for="stock" class="col-md-4 col-form-label text-md-end">在庫数</label>
                             <div class="col-md-6">
-                                <input id="stock" type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" value="{{ old('stock', $product->stock) }}" required>
+                                <input id="stock" type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" value="{{ old('stock', $product->stock) }}" >
                                 @error('stock')
                                     <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                                 @enderror
