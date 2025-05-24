@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Company;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    // 全アクションにログイン必須
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function index(\Illuminate\Http\Request $request)
     {
         $query = Product::with('company');
 
@@ -40,26 +40,8 @@ class ProductController extends Controller
         return view('create', compact('companies'));
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-            $request->validate([
-                'company_id' => 'required|integer',
-                'product_name' => 'required|string|max:255',
-                'price' => 'required|numeric',
-                'stock' => 'required|integer',
-                'comment' => 'nullable|string',
-                'img_path' => 'nullable|image',
-            ], [
-                'product_name.required' => '商品名を入力してください。',
-                'product_name.max' => '商品名は255文字以内で入力してください。',
-                'company_id.required' => 'メーカー名を選択してください。',
-                'price.required' => '価格を入力してください。',
-                'price.numeric' => '価格は数字で入力してください。',
-                'stock.required' => '在庫数を入力してください。',
-                'stock.integer' => '在庫数は整数で入力してください。',
-                'img_path.image' => '画像ファイルを選択してください。',
-            ]);
-
         try {
             $data = $request->only(['company_id', 'product_name', 'price', 'stock', 'comment']);
 
@@ -89,25 +71,8 @@ class ProductController extends Controller
         return view('edit', compact('product', 'companies'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
-            $request->validate([
-                'company_id' => 'required|integer',
-                'product_name' => 'required|string|max:255',
-                'price' => 'required|numeric',
-                'stock' => 'required|integer',
-                'comment' => 'nullable|string',
-                'img_path' => 'nullable|image',
-            ], [
-                'product_name.required' => '商品名を入力してください。',
-                'product_name.max' => '商品名は255文字以内で入力してください。',
-                'company_id.required' => 'メーカー名を選択してください。',
-                'price.required' => '価格を入力してください。',
-                'price.numeric' => '価格は数字で入力してください。',
-                'stock.required' => '在庫数を入力してください。',
-                'stock.integer' => '在庫数は整数で入力してください。',
-                'img_path.image' => '画像ファイルを選択してください。',
-            ]);
         try {
             $product = Product::findOrFail($id);
             $product->update($request->only(['company_id', 'product_name', 'price', 'stock', 'comment']));
@@ -136,7 +101,7 @@ class ProductController extends Controller
             if ($product->img_path && Storage::exists('public/' . $product->img_path)) {
                 Storage::delete('public/' . $product->img_path);
             }
-            
+
             $product->delete();
 
             return redirect()->route('productList.index')->with('success', '商品が削除されました');
