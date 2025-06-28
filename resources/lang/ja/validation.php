@@ -29,9 +29,7 @@ return [
         'comment' => [
             'required' => 'コメントは必須です。',
         ],
-        'img_path' => [
-            'required' => '商品画像は必須です。',
-        ],
+        'img_path' => ['nullable', 'image'],
     ],
 
     'attributes' => [

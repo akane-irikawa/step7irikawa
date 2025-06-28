@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Api\PurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ Route::get('/', function () {
     return view('welcome');    
 });
 
+Route::get('/productList/search', [ProductController::class, 'search'])->name('productList.search');
+
 // 商品関連のルート設定
 Route::middleware(['auth'])->group(function () {
     Route::get('/productList', [ProductController::class, 'index'])->name('productList.index');
@@ -35,4 +38,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/home', function () {
     return redirect()->route('productList.index');  // 商品一覧画面にリダイレクト
 })->name('home')->middleware('auth');
+
+Route::post('/purchase', [PurchaseController::class, 'purchase']);
 
